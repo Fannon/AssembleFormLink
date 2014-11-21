@@ -56,8 +56,10 @@ class CreateFormLinkParserFunction extends SMWQueryProcessor  {
         // Those information are included through hidden form input elements
         $html .= '<input class="cfl cfl-hidden" style="display: none;" value="' . $url . '/index.php/Special:FormEdit/' . $formName . '/"></input>';
 
+        //
         if (array_key_exists('namespace-min-width', $arguments)) {
             $namespaceStyle = ' style="min-width: ' . $arguments['namespace-min-width'] . '"';
+            unset($arguments['namespace-min-width']);
         }
 
 

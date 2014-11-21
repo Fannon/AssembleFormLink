@@ -98,8 +98,8 @@ function createFormLinkOnBeforePageDisplay( OutputPage &$out, Skin &$skin ) {
 */
 function createFormLinkOnParserFirstCallInit( &$parser ) {
 
-  // Register {{#create-form-link }} parser function
-  $parser->setFunctionHook('create-form-link', 'CreateFormLinkParserFunction::parserFunction');
+  // Register {{#createFormLink }} parser function
+  $parser->setFunctionHook('createFormLink', 'CreateFormLinkParserFunction::parserFunction');
 
   return true;
 }

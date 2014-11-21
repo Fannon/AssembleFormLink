@@ -10,5 +10,5 @@ $magicWords = array();
 
 /** English (English) */
 $magicWords['en'] = array(
-    'create-form-link' => array( 0, 'create-form-link' ),
+    'createFormLink' => array(0, 'createFormLink'),
 );
