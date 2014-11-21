@@ -1,4 +1,7 @@
 
+input.cfl {
+    width: auto;
+}
 
 .cfl {
     display: inline;
@@ -6,10 +9,12 @@
     margin-bottom: 8px;
 }
 
-.cfl-seperator, .cfl-namespace {
+.cfl-separator, .cfl-namespace {
     border: 1px solid #CCC;
     border-radius: 3px;
     padding: 2px 8px;
+    background: #EEE;
+    color: #444;
 }
 
 .cfl-form input.cfl {

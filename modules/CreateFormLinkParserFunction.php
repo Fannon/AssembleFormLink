@@ -38,7 +38,8 @@ class CreateFormLinkParserFunction extends SMWQueryProcessor  {
         // If a namespace is given, always use it first
         if (array_key_exists('namespace', $arguments)) {
             $html .= '<span class="cfl cfl-namespace">' . $arguments['namespace'] . '</span>';
-            $html .= '<span class="cfl cfl-seperator">:</span>';
+            $html .= '<span class="cfl cfl-separator">:</span>';
+            $html .= '<input class="cfl cfl-hidden" style="display: none;" value="' . $arguments['namespace'] . ':"></input>';
             unset($arguments['namespace']);
         }
 
@@ -52,17 +53,22 @@ class CreateFormLinkParserFunction extends SMWQueryProcessor  {
 
         foreach ($arguments as $key => $value) {
 
-            // If the value is "just" true, no value is given. Assume it is a seperator
+            // If the value is "just" true, no value is given. Assume it is a separator
             if ($value === true) {
+
+                $separatorString = $key;
+
                 if ($key === 'slash') {
-                    $html .= '<span class="cfl cfl-seperator">/</span>';
+                    $separatorString = '/';
                 } else if ($key === 'colon') {
-                    $html .= '<span class="cfl cfl-seperator">:</span>';
-                } else {
-                    $html .= '<span class="cfl cfl-seperator">' . $value . '</span>';
+                    $separatorString = ':';
                 }
 
-            // If its not a seperator, it is a form element
+                $html .= '<span class="cfl cfl-separator">' . $separatorString . '</span>';
+                $html .= '<input class="cfl cfl-hidden" style="display: none;" value="' . $separatorString . '"></input>';
+
+            // If its not a separator, it is a form element
+
             } else {
                 if (startsWith($value, 'textfield')) {
 
@@ -80,12 +86,12 @@ class CreateFormLinkParserFunction extends SMWQueryProcessor  {
                         $additionalParams .= ' ' . htmlspecialchars($inputParamKey) . '="' . htmlspecialchars($inputParamValue) . '"';
                     }
 
-                    $html .= '<input type="text" class="cfl" name="' . $key . '"' . $additionalParams . '>';
+                    $html .= '<input type="text" required class="cfl" name="' . $key . '"' . $additionalParams . '>';
                 }
             }
         }
 
-        $html .= '<input type="submit" required value="' . $submitText . '" class="cfl-submit">';
+        $html .= '<input type="submit" value="' . $submitText . '" class="cfl-submit" onclick="$.cfl(this);">';
 
 
         $html .= '</form>';
@@ -121,12 +127,12 @@ class CreateFormLinkParserFunction extends SMWQueryProcessor  {
  * @param array string $options
  * @return array $results
  */
-function extractOptions(array $options, $seperator = '=') {
+function extractOptions(array $options, $separator = '=') {
 
     $results = array();
 
     foreach ($options as $option) {
-        $pair = explode($seperator, $option, 2 );
+        $pair = explode($separator, $option, 2 );
         if (count($pair) == 2) {
             $name           = trim( $pair[0] );
             $value          = trim( $pair[1] );
