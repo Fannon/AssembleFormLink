@@ -39,11 +39,12 @@ class CreateFormLinkParserFunction extends SMWQueryProcessor  {
         $formName = $params[0];
         array_shift($params); // Remove first argument, already stored in $form
         $arguments = extractOptions($params);
-        $url = $wgScriptPath;
+        $url = $wgScriptPath . '/index.php/';
 
         // Defaults
         $submitText = $wgCreateFormLinkSubmitText;
         $namespaceStyle = '';
+        $categoryStyle = '';
 
 
         //////////////////////////////////////////
@@ -54,18 +55,39 @@ class CreateFormLinkParserFunction extends SMWQueryProcessor  {
 
         // Calculate the URL that creates a new form of given formtype
         // Those information are included through hidden form input elements
-        $html .= '<input class="cfl cfl-hidden" style="display: none;" value="' . $url . '/index.php/Special:FormEdit/' . $formName . '/"></input>';
+        $html .= '<input class="cfl cfl-hidden" style="display: none;" value="' . $url . 'Special:FormEdit/' . $formName . '/"></input>';
 
-        //
+
+        // Get category-min-width parameter if given
+        if (array_key_exists('category-min-width', $arguments)) {
+            $categoryStyle = ' style="min-width: ' . $arguments['category-min-width'] . '"';
+            unset($arguments['category-min-width']);
+        }
+
+        // Print Category Link if given
+        if (array_key_exists('category-link', $arguments)) {
+
+            // Pretty print if human readable name is given through an additional '='
+            $nameArray = explode('=', $arguments['category-link']);
+            $internalName = $nameArray[0];
+            $readableName = $nameArray[0];
+
+            if (isset($nameArray[1])) {
+                $readableName = $nameArray[1];
+            }
+
+            $html .= '<span class="cfl cfl-category-link"' . $categoryStyle . '><a href="' . $url . 'Category:' . $internalName . '">' . $readableName . '</a></span>';
+            unset($arguments['category-link']);
+        }
+
+        // Get namespace-min-width parameter if given
         if (array_key_exists('namespace-min-width', $arguments)) {
             $namespaceStyle = ' style="min-width: ' . $arguments['namespace-min-width'] . '"';
             unset($arguments['namespace-min-width']);
         }
 
-
         // If a namespace is given, always use it first
         if (array_key_exists('namespace', $arguments)) {
-
             $html .= '<span class="cfl cfl-namespace"' . $namespaceStyle . '>' . $arguments['namespace'] . '</span>';
             $html .= '<span class="cfl cfl-separator">:</span>';
             $html .= '<input class="cfl cfl-hidden" style="display: none;" value="' . $arguments['namespace'] . ':"></input>';
@@ -87,15 +109,21 @@ class CreateFormLinkParserFunction extends SMWQueryProcessor  {
 
                 $separatorString = $key;
 
-                if ($key === 'slash') {
+                if (startsWith($key, 'slash')) {
                     $separatorString = '/';
                     $separatorValue = '/';
-                } else if ($key === 'colon') {
+                } else if (startsWith($key, 'colon')) {
                     $separatorString = ':';
                     $separatorValue = ':';
-                } else if ($key === 'space') {
+                } else if (startsWith($key, 'space')) {
                     $separatorString = '&nbsp;';
                     $separatorValue = ' ';
+                } else if (startsWith($key, 'comma')) {
+                    $separatorString = ',';
+                    $separatorValue = ',';
+                } else if (startsWith($key, 'commaspace')) {
+                    $separatorString = ',&nbsp;';
+                    $separatorValue = ', ';
                 }
 
                 $html .= '<span class="cfl cfl-separator">' . $separatorString . '</span>';
@@ -116,9 +144,7 @@ class CreateFormLinkParserFunction extends SMWQueryProcessor  {
 
         $html .= '<input type="submit" value="' . $submitText . '" class="cfl-submit">';
 
-
         $html .= '</form>';
-
 
         $debug = array(
             '$formName' => $formName,
@@ -139,9 +165,6 @@ class CreateFormLinkParserFunction extends SMWQueryProcessor  {
     }
 
 }
-
-
-
 
 /**
  * Converts an array of values in form [0] => "name=value" into a real
@@ -186,22 +209,6 @@ function extractSubOptions($optionString) {
 
     return $additionalParams;
 }
-
-/**
- *
- *
- * @param string $optionString
- * @return array $results
- */
-function extractInputOptions($optionString) {
-
-    $options = explode(",", $optionString);
-
-    $results = extractOptions($options, ':');
-
-    return $results;
-}
-
 
 /**
  * Check if string starts with a (sub)string
