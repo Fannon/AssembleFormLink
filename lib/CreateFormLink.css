@@ -19,14 +19,14 @@ input.cfl {
     color: #444;
 }
 
-.cfl-category-link {
+.cfl-category {
     border-radius: 3px;
     padding: 2px 8px;
     background: #0075C4;
 }
-.cfl-category-link a,
-.cfl-category-link a:visited,
-.cfl-category-link a:hover {
+a.cfl-category ,
+a:visited.cfl-category,
+a:hover.cfl-category {
     color: #FFF !important;
     text-decoration: none !important;
 }

@@ -32,6 +32,7 @@ class CreateFormLinkParserFunction extends SMWQueryProcessor  {
         // Imports
         global $wgScriptPath;
         global $wgCreateFormLinkSubmitText;
+        global $wgCreateFormLinkSubmitText;
 
         // Get Parameters
         $params = func_get_args();
@@ -45,6 +46,7 @@ class CreateFormLinkParserFunction extends SMWQueryProcessor  {
         $submitText = $wgCreateFormLinkSubmitText;
         $namespaceStyle = '';
         $categoryStyle = '';
+        $namespaceCategoryLink = false;
 
 
         //////////////////////////////////////////
@@ -58,6 +60,14 @@ class CreateFormLinkParserFunction extends SMWQueryProcessor  {
         $html .= '<input class="cfl cfl-hidden" style="display: none;" value="' . $url . 'Special:FormEdit/' . $formName . '/"></input>';
 
 
+        // If name-space-category option is given, the namespace will link to a similar named category
+        // This makes a namespace look and behave like a category link
+        if (array_key_exists('namespace-category', $arguments)) {
+            $namespaceCategoryLink = true;
+            unset($arguments['namespace-category']);
+        }
+
+
         // Get category-min-width parameter if given
         if (array_key_exists('category-min-width', $arguments)) {
             $categoryStyle = ' style="min-width: ' . $arguments['category-min-width'] . '"';
@@ -65,10 +75,10 @@ class CreateFormLinkParserFunction extends SMWQueryProcessor  {
         }
 
         // Print Category Link if given
-        if (array_key_exists('category-link', $arguments)) {
+        if (array_key_exists('category', $arguments)) {
 
             // Pretty print if human readable name is given through an additional '='
-            $nameArray = explode('=', $arguments['category-link']);
+            $nameArray = explode('=', $arguments['category']);
             $internalName = $nameArray[0];
             $readableName = $nameArray[0];
 
@@ -76,8 +86,8 @@ class CreateFormLinkParserFunction extends SMWQueryProcessor  {
                 $readableName = $nameArray[1];
             }
 
-            $html .= '<span class="cfl cfl-category-link"' . $categoryStyle . '><a href="' . $url . 'Category:' . $internalName . '">' . $readableName . '</a></span>';
-            unset($arguments['category-link']);
+            $html .= '<a href="' . $url . 'Category:' . $internalName . '" class="cfl cfl-category"' . $categoryStyle . '>' . $readableName . '</a>';
+            unset($arguments['category']);
         }
 
         // Get namespace-min-width parameter if given
@@ -88,9 +98,25 @@ class CreateFormLinkParserFunction extends SMWQueryProcessor  {
 
         // If a namespace is given, always use it first
         if (array_key_exists('namespace', $arguments)) {
-            $html .= '<span class="cfl cfl-namespace"' . $namespaceStyle . '>' . $arguments['namespace'] . '</span>';
+
+            // Pretty print if human readable name is given through an additional '='
+            $nameArray = explode('=', $arguments['namespace']);
+            $internalName = $nameArray[0];
+            $readableName = $nameArray[0];
+
+            if (isset($nameArray[1])) {
+                $readableName = $nameArray[1];
+            }
+
+            if ($namespaceCategoryLink) {
+                $html .= '<a href="' . $url . 'Category:' . $internalName . '" class="cfl cfl-category"' . $namespaceStyle . '>' . $readableName . '</a>';
+            } else {
+                $html .= '<span class="cfl cfl-namespace"' . $namespaceStyle . '>' . $arguments['namespace'] . '</span>';
+            }
+
+
             $html .= '<span class="cfl cfl-separator">:</span>';
-            $html .= '<input class="cfl cfl-hidden" style="display: none;" value="' . $arguments['namespace'] . ':"></input>';
+            $html .= '<input class="cfl cfl-hidden" style="display: none;" value="' . $internalName . ':"></input>';
             unset($arguments['namespace']);
         }
 
