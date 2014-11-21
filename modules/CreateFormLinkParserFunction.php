@@ -13,6 +13,9 @@ class CreateFormLinkParserFunction extends SMWQueryProcessor  {
     /**
      * Parser function handler for {{#create-form-link: .. | .. }}
      *
+     * This generates both visible and invisible form elements that hold the values for generating the correct Form Link
+     *
+     *
      *
      * @param Parser $parser
      * @param string $arg
@@ -27,13 +30,16 @@ class CreateFormLinkParserFunction extends SMWQueryProcessor  {
         // Get Parameters
         $params = func_get_args();
         array_shift($params); // Remove the $parser.
-        $form = $params[0];
+        $formName = $params[0];
         array_shift($params); // Remove first argument, already stored in $form
         $arguments = extractOptions($params);
         $url = $wgScriptPath;
         $submitText = "Create";
 
         $html = '<form class="cfl-form">';
+
+        // Calculate the URL that creates a new form of given formtype
+        $html .= '<input class="cfl cfl-hidden" style="display: none;" value="' . $url . '/index.php/Special:FormEdit/' . $formName . '/"></input>';
 
         // If a namespace is given, always use it first
         if (array_key_exists('namespace', $arguments)) {
@@ -62,6 +68,8 @@ class CreateFormLinkParserFunction extends SMWQueryProcessor  {
                     $separatorString = '/';
                 } else if ($key === 'colon') {
                     $separatorString = ':';
+                } else if ($key === 'space') {
+                    $separatorString = ' ';
                 }
 
                 $html .= '<span class="cfl cfl-separator">' . $separatorString . '</span>';
@@ -78,8 +86,6 @@ class CreateFormLinkParserFunction extends SMWQueryProcessor  {
 
                     $inputParams = extractOptions($matches[1]); // Don't include the brackets
 
-                    // jlog($inputParams);
-
                     // Add additional parameters
                     $additionalParams = '';
                     foreach ($inputParams as $inputParamKey => $inputParamValue) {
@@ -91,14 +97,14 @@ class CreateFormLinkParserFunction extends SMWQueryProcessor  {
             }
         }
 
-        $html .= '<input type="submit" value="' . $submitText . '" class="cfl-submit" onclick="$.cfl(this);">';
+        $html .= '<input type="submit" value="' . $submitText . '" class="cfl-submit">';
 
 
         $html .= '</form>';
 
 
         $debug = array(
-            '$form' => $form,
+            '$formName' => $formName,
             '$arguments' => $arguments,
             '$url' => $url,
             '$html' => $html,
