@@ -1,0 +1,27 @@
+
+
+.cfl {
+    display: inline;
+    margin-right: 8px;
+    margin-bottom: 8px;
+}
+
+.cfl-seperator, .cfl-namespace {
+    border: 1px solid #CCC;
+    border-radius: 3px;
+    padding: 2px 8px;
+}
+
+.cfl-form input.cfl {
+    border: 1px solid #CCC !important;
+    border-radius: 3px !important;
+    padding: 2px 8px;
+}
+
+.cfl-form .cfl-submit {
+    border: none;
+    border-radius: 3px;
+    padding: 2px 8px;
+    background: #81C735;
+}
+
