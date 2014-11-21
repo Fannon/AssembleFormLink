@@ -24,8 +24,14 @@ class CreateFormLinkParserFunction extends SMWQueryProcessor  {
      */
     public static function parserFunction(Parser &$parser) {
 
+
+        //////////////////////////////////////////
+        // VARIABLES                            //
+        //////////////////////////////////////////
+
         // Imports
         global $wgScriptPath;
+        global $wgCreateFormLinkSubmitText;
 
         // Get Parameters
         $params = func_get_args();
@@ -34,16 +40,31 @@ class CreateFormLinkParserFunction extends SMWQueryProcessor  {
         array_shift($params); // Remove first argument, already stored in $form
         $arguments = extractOptions($params);
         $url = $wgScriptPath;
-        $submitText = "Create";
+
+        // Defaults
+        $submitText = $wgCreateFormLinkSubmitText;
+        $namespaceStyle = '';
+
+
+        //////////////////////////////////////////
+        // BUILD FORM (HTML)                    //
+        //////////////////////////////////////////
 
         $html = '<form class="cfl-form">';
 
         // Calculate the URL that creates a new form of given formtype
+        // Those information are included through hidden form input elements
         $html .= '<input class="cfl cfl-hidden" style="display: none;" value="' . $url . '/index.php/Special:FormEdit/' . $formName . '/"></input>';
+
+        if (array_key_exists('namespace-min-width', $arguments)) {
+            $namespaceStyle = ' style="min-width: ' . $arguments['namespace-min-width'] . '"';
+        }
+
 
         // If a namespace is given, always use it first
         if (array_key_exists('namespace', $arguments)) {
-            $html .= '<span class="cfl cfl-namespace">' . $arguments['namespace'] . '</span>';
+
+            $html .= '<span class="cfl cfl-namespace"' . $namespaceStyle . '>' . $arguments['namespace'] . '</span>';
             $html .= '<span class="cfl cfl-separator">:</span>';
             $html .= '<input class="cfl cfl-hidden" style="display: none;" value="' . $arguments['namespace'] . ':"></input>';
             unset($arguments['namespace']);
@@ -66,31 +87,25 @@ class CreateFormLinkParserFunction extends SMWQueryProcessor  {
 
                 if ($key === 'slash') {
                     $separatorString = '/';
+                    $separatorValue = '/';
                 } else if ($key === 'colon') {
                     $separatorString = ':';
+                    $separatorValue = ':';
                 } else if ($key === 'space') {
-                    $separatorString = ' ';
+                    $separatorString = '&nbsp;';
+                    $separatorValue = ' ';
                 }
 
                 $html .= '<span class="cfl cfl-separator">' . $separatorString . '</span>';
-                $html .= '<input class="cfl cfl-hidden" style="display: none;" value="' . $separatorString . '"></input>';
+                $html .= '<input class="cfl cfl-hidden" style="display: none;" value="' . $separatorValue . '"></input>';
 
             // If its not a separator, it is a form element
 
             } else {
+
                 if (startsWith($value, 'textfield')) {
 
-                    // Look for text within brackets: []
-                    // http://stackoverflow.com/a/10104517/776425
-                    preg_match_all("/\[([^\]]*)\]/", $value, $matches);
-
-                    $inputParams = extractOptions($matches[1]); // Don't include the brackets
-
-                    // Add additional parameters
-                    $additionalParams = '';
-                    foreach ($inputParams as $inputParamKey => $inputParamValue) {
-                        $additionalParams .= ' ' . htmlspecialchars($inputParamKey) . '="' . htmlspecialchars($inputParamValue) . '"';
-                    }
+                    $additionalParams = extractSubOptions($value);
 
                     $html .= '<input type="text" required class="cfl" name="' . $key . '"' . $additionalParams . '>';
                 }
@@ -148,6 +163,26 @@ function extractOptions(array $options, $separator = '=') {
         }
     }
     return $results;
+}
+
+
+function extractSubOptions($optionString) {
+
+    $additionalParams = '';
+
+    // Look for text within brackets: []
+    // http://stackoverflow.com/a/10104517/776425
+    preg_match_all("/\[([^\]]*)\]/", $optionString, $matches);
+
+    $inputParams = extractOptions($matches[1]); // Don't include the brackets
+
+    // Add additional parameters
+    $additionalParams = '';
+    foreach ($inputParams as $inputParamKey => $inputParamValue) {
+        $additionalParams .= ' ' . htmlspecialchars($inputParamKey) . '="' . htmlspecialchars($inputParamValue) . '"';
+    }
+
+    return $additionalParams;
 }
 
 /**
