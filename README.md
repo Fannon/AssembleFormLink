@@ -1,5 +1,5 @@
-This is a MediaWiki Wrapper Extension for the [plastic.js](http://www.plasticjs.org) library.
+This is a Semantic MediaWiki Extension.
 
-For more documentation head to the [MediaWiki Extension](https://www.mediawiki.org/wiki/Extension:PlasticMW)
+CreateFormLink is a parser function that allows to build simple helper forms on the page display. They enquire all necessary data to create a correct and constistent URL when creating a new page through a form.
 
-**WARNING**: This extension is *unsafe*, it may introduce HTML/JavaScript Injection to your wiki.
+For more documentation head to the [MediaWiki Extension](https://www.mediawiki.org/wiki/Extension:CreateFormLink)
