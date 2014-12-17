@@ -7,11 +7,11 @@
  * @ingroup Extensions
  */
 
-class CreateFormLinkParserFunction extends SMWQueryProcessor  {
+class AssembleFormLinkParserFunction extends SMWQueryProcessor  {
 
 
     /**
-     * Parser function handler for {{#create-form-link: .. | .. }}
+     * Parser function handler for {{#assembleFormLink: .. | .. }}
      *
      * This generates both visible and invisible form elements that hold the values for generating the correct Form Link
      *
@@ -31,8 +31,7 @@ class CreateFormLinkParserFunction extends SMWQueryProcessor  {
 
         // Imports
         global $wgScriptPath;
-        global $wgCreateFormLinkSubmitText;
-        global $wgCreateFormLinkSubmitText;
+        global $wgAssembleFormLinkSubmitText;
 
         // Get Parameters
         $params = func_get_args();
@@ -43,7 +42,7 @@ class CreateFormLinkParserFunction extends SMWQueryProcessor  {
         $url = $wgScriptPath . '/index.php/';
 
         // Defaults
-        $submitText = $wgCreateFormLinkSubmitText;
+        $submitText = $wgAssembleFormLinkSubmitText;
         $namespaceStyle = '';
         $categoryStyle = '';
         $categoryIncludeInUrl = false;
@@ -54,6 +53,10 @@ class CreateFormLinkParserFunction extends SMWQueryProcessor  {
         //////////////////////////////////////////
 
         $html = '<form class="cfl-form">';
+
+        // TODO: Rename category to label
+        // TODO: Add option to make the label a link (to a category or general)
+
 
         // Calculate the URL that creates a new form of given formtype
         // Those information are included through hidden form input elements
@@ -89,12 +92,6 @@ class CreateFormLinkParserFunction extends SMWQueryProcessor  {
                 $html .= '<input class="cfl cfl-hidden" style="display: none;" value="' . $internalName . '"></input>';
             }
             unset($arguments['category']);
-        }
-
-        // Get namespace-min-width parameter if given
-        if (array_key_exists('namespace-min-width', $arguments)) {
-            $namespaceStyle = ' style="min-width: ' . $arguments['namespace-min-width'] . '"';
-            unset($arguments['namespace-min-width']);
         }
 
         // If a submit text is given, use it instead of the default

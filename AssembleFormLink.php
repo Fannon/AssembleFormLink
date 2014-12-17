@@ -2,14 +2,13 @@
 /**
  * plastic.js MediaWiki Wrapper
  *
- * For more info see http://mediawiki.org/wiki/Extension:CreateFormLink
+ * For more info see http://mediawiki.org/wiki/Extension:AssembleFormLink
  *
  * @file
  * @ingroup Extensions
  * @author Simon Heimler, 2014
  * @license GNU General Public Licence 2.0 or later
  */
-
 
 //////////////////////////////////////////
 // VARIABLES                            //
@@ -23,7 +22,7 @@ $dirbasename = basename( $dir );
 // CONFIGURATION                        //
 //////////////////////////////////////////
 
-$wgCreateFormLinkSubmitText = 'CREATE';
+$wgAssembleFormLinkSubmitText = 'NEW';
 
 
 //////////////////////////////////////////
@@ -32,11 +31,11 @@ $wgCreateFormLinkSubmitText = 'CREATE';
 
 $wgExtensionCredits['other'][] = array(
    'path'           => __FILE__,
-   'name'           => 'CreateFormLink',
+   'name'           => 'AssembleFormLink',
    'author'         => array('Simon Heimler'),
    'version'        => '0.0.1',
-   'url'            => 'https://www.mediawiki.org/wiki/Extension:CreateFormLink',
-   'descriptionmsg' => 'CreateFormLink-desc',
+   'url'            => 'https://www.mediawiki.org/wiki/Extension:AssembleFormLink',
+   'descriptionmsg' => 'AssembleFormLink-desc',
 );
 
 
@@ -44,19 +43,19 @@ $wgExtensionCredits['other'][] = array(
 // RESOURCE LOADER                      //
 //////////////////////////////////////////
 
-$wgResourceModules['ext.CreateFormLink'] = array(
+$wgResourceModules['ext.AssembleFormLink'] = array(
    'scripts' => array(
-      'lib/CreateFormLink.js',
+      'lib/AssembleFormLink.js',
    ),
    'styles' => array(
-      'lib/CreateFormLink.css',
+      'lib/AssembleFormLink.css',
    )
    ,'messages' => array(
    ),
    'dependencies' => array(
    ),
    'localBasePath' => __DIR__,
-   'remoteExtPath' => 'CreateFormLink',
+   'remoteExtPath' => 'AssembleFormLink',
 );
 
 
@@ -65,14 +64,14 @@ $wgResourceModules['ext.CreateFormLink'] = array(
 //////////////////////////////////////////
 
 // Register i18n
-$wgExtensionMessagesFiles['CreateFormLinkMagic'] = $dir . '/CreateFormLink.i18n.magic.php';
+$wgExtensionMessagesFiles['AssembleFormLinkMagic'] = $dir . '/AssembleFormLink.i18n.magic.php';
 
 // Register files
-$wgAutoloadClasses['CreateFormLinkParserFunction'] = $dir . '/modules/CreateFormLinkParserFunction.php';
+$wgAutoloadClasses['AssembleFormLinkParserFunction'] = $dir . '/modules/AssembleFormLinkParserFunction.php';
 
 // Register hooks
-$wgHooks['BeforePageDisplay'][] = 'createFormLinkOnBeforePageDisplay';
-$wgHooks['ParserFirstCallInit'][] = 'createFormLinkOnParserFirstCallInit';
+$wgHooks['BeforePageDisplay'][] = 'assembleFormLinkOnBeforePageDisplay';
+$wgHooks['ParserFirstCallInit'][] = 'assembleFormLinkOnParserFirstCallInit';
 
 
 
@@ -83,10 +82,10 @@ $wgHooks['ParserFirstCallInit'][] = 'createFormLinkOnParserFirstCallInit';
 /**
 * Add plastic.js library to all pages
 */
-function createFormLinkOnBeforePageDisplay( OutputPage &$out, Skin &$skin ) {
+function assembleFormLinkOnBeforePageDisplay( OutputPage &$out, Skin &$skin ) {
 
   // Add as ResourceLoader Module
-  $out->addModules('ext.CreateFormLink');
+  $out->addModules('ext.AssembleFormLink');
 
   return true;
 }
@@ -96,10 +95,10 @@ function createFormLinkOnBeforePageDisplay( OutputPage &$out, Skin &$skin ) {
 *
 * See also http://www.mediawiki.org/wiki/Manual:Parser_functions
 */
-function createFormLinkOnParserFirstCallInit( &$parser ) {
+function assembleFormLinkOnParserFirstCallInit( &$parser ) {
 
-  // Register {{#createFormLink }} parser function
-  $parser->setFunctionHook('createFormLink', 'CreateFormLinkParserFunction::parserFunction');
+  // Register {{#assembleFormLink }} parser function
+  $parser->setFunctionHook('assembleFormLink', 'AssembleFormLinkParserFunction::parserFunction');
 
   return true;
 }
