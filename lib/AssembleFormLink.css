@@ -1,51 +1,54 @@
-.cfl {
+.afl {
     display: inline-block;
     margin-right: 8px;
     margin-bottom: 8px;
     min-height: 22px;
 }
 
-input.cfl {
+input.afl {
     width: auto;
 }
 
-.cfl.select2-container {
+.afl.select2-container {
     margin: 4px 18px 4px 0;
     min-width: 220px;
 }
 
-.cfl-separator,
-.cfl-namespace {
+.afl-separator,
+.afl-namespace {
     margin-top: 1px;
     border: 1px solid #CCC;
     border-radius: 3px;
     padding: 1px 8px;
     background: #EEE;
     color: #444;
+    min-height: 22px;
 }
 
-.cfl-category {
+.afl-category {
     border-radius: 3px;
     padding: 2px 8px;
     background: #0075C4;
 }
-a.cfl-category ,
-a:visited.cfl-category,
-a:hover.cfl-category {
+a.afl-category ,
+a:visited.afl-category,
+a:hover.afl-category {
     color: #FFF !important;
     text-decoration: none !important;
 }
 
-.cfl-form input.cfl {
+.afl-form input.afl {
     border: 1px solid #CCC !important;
     border-radius: 3px !important;
     padding: 1px 8px;
 }
 
-.cfl-form .cfl-submit {
-    border: none;
+.afl-form .afl-submit {
+    border: 1px solid #81C735;
     border-radius: 3px;
     padding: 4px 8px;
     background: #81C735;
+    min-height: 22px;
+    margin-top: 1px;
 }
 

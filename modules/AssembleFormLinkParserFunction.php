@@ -54,14 +54,14 @@ class AssembleFormLinkParserFunction extends SMWQueryProcessor  {
         // BUILD FORM (HTML)                    //
         //////////////////////////////////////////
 
-        $html = '<form class="cfl-form">';
+        $html = '<form class="afl-form">';
 
         // TODO: Rename category to label
         // TODO: Add option to make the label a link (to a category or general)
 
         // Calculate the URL that creates a new form of given formtype
         // Those information are included through hidden form input elements
-        $html .= '<input class="cfl cfl-hidden" style="display: none;" value="' . $url . 'Special:FormEdit/' . $formName . '/"></input>';
+        $html .= '<input class="afl afl-hidden" style="display: none;" value="' . $url . 'Special:FormEdit/' . $formName . '/"></input>';
 
         // Get category-min-width parameter if given
         if (array_key_exists('category-include-in-url', $arguments)) {
@@ -87,10 +87,10 @@ class AssembleFormLinkParserFunction extends SMWQueryProcessor  {
                 $readableName = $nameArray[1];
             }
 
-            $html .= '<a href="' . $url . 'Category:' . $internalName . '" class="cfl cfl-category"' . $categoryStyle . '>' . $readableName . '</a>';
+            $html .= '<a href="' . $url . 'Category:' . $internalName . '" class="afl afl-category"' . $categoryStyle . '>' . $readableName . '</a>';
 
             if ($categoryIncludeInUrl) {
-                $html .= '<input class="cfl cfl-hidden" style="display: none;" value="' . $internalName . '"></input>';
+                $html .= '<input class="afl afl-hidden" style="display: none;" value="' . $internalName . '"></input>';
             }
             unset($arguments['category']);
         }
@@ -126,8 +126,8 @@ class AssembleFormLinkParserFunction extends SMWQueryProcessor  {
                     $separatorValue = ',';
                 }
 
-                $html .= '<span class="cfl cfl-separator">' . $separatorString . '</span>';
-                $html .= '<input class="cfl cfl-hidden" style="display: none;" value="' . $separatorValue . '"></input>';
+                $html .= '<span class="afl afl-separator">' . $separatorString . '</span>';
+                $html .= '<input class="afl afl-hidden" style="display: none;" value="' . $separatorValue . '"></input>';
 
 
             // If its not a separator, it is a form element
@@ -137,6 +137,7 @@ class AssembleFormLinkParserFunction extends SMWQueryProcessor  {
 
                     // Extract suboptions and add them as HTML attributes to the input element
                     $additionalAttributes = extractSubOptions($value);
+                    $additionalAttributes .= ' name="' . $key . '"';
 
                     // Get the suboptions as associative array, to allow for easier handling
                     $additionalAttributesArray = extractSubOptions($value, true);
@@ -144,19 +145,19 @@ class AssembleFormLinkParserFunction extends SMWQueryProcessor  {
                     // If data-widget is a select box, or the select2 library is used, render a <select> element
 
                     if (array_key_exists('data-select2', $additionalAttributesArray)) {
-                        $html .= '<select required class="cfl select2"' . $additionalAttributes . '></select>';
+                        $html .= '<select required class="afl select2"' . $additionalAttributes . '></select>';
                     } else if (array_key_exists('data-select', $additionalAttributesArray)) {
-                        $html .= '<select required class="cfl"' . $additionalAttributes . '></select>';
+                        $html .= '<select required class="afl"' . $additionalAttributes . '></select>';
                     } else {
                         $additionalAttributes .= extractSubOptions($value);
-                        $html .= '<input type="text" required class="cfl' . $additionalClasses . '" name="' . $key . '"' . $additionalAttributes . '>';
+                        $html .= '<input type="text" required class="afl' . $additionalClasses . '"' . $additionalAttributes . '>';
                     }
 
                 }
             }
         }
 
-        $html .= '<input type="submit" value="' . $submitText . '" class="cfl-submit">';
+        $html .= '<input type="submit" value="' . $submitText . '" class="afl-submit">';
 
         $html .= '</form>';
 
