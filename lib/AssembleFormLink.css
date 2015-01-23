@@ -1,8 +1,3 @@
-
-input.cfl {
-    width: auto;
-}
-
 .cfl {
     display: inline-block;
     margin-right: 8px;
@@ -10,8 +5,18 @@ input.cfl {
     min-height: 22px;
 }
 
+input.cfl {
+    width: auto;
+}
+
+.cfl.select2-container {
+    margin: 4px 18px 4px 0;
+    min-width: 220px;
+}
+
 .cfl-separator,
 .cfl-namespace {
+    margin-top: 1px;
     border: 1px solid #CCC;
     border-radius: 3px;
     padding: 1px 8px;

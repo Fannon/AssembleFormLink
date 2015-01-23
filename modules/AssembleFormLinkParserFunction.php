@@ -1,12 +1,11 @@
 <?php
 
 /**
- * Hooks for PlasticMW extension
+ * Hooks for the parser Functioons
  *
  * @file
  * @ingroup Extensions
  */
-
 class AssembleFormLinkParserFunction extends SMWQueryProcessor  {
 
 
@@ -41,11 +40,14 @@ class AssembleFormLinkParserFunction extends SMWQueryProcessor  {
         $arguments = extractOptions($params);
         $url = $wgScriptPath . '/index.php/';
 
-        // Defaults
+        // Variables
         $submitText = $wgAssembleFormLinkSubmitText;
         $namespaceStyle = '';
         $categoryStyle = '';
         $categoryIncludeInUrl = false;
+        $additionalClasses = '';
+        $autocompleteValues = array();
+        $select2 = false;
 
 
         //////////////////////////////////////////
@@ -56,7 +58,6 @@ class AssembleFormLinkParserFunction extends SMWQueryProcessor  {
 
         // TODO: Rename category to label
         // TODO: Add option to make the label a link (to a category or general)
-
 
         // Calculate the URL that creates a new form of given formtype
         // Those information are included through hidden form input elements
@@ -128,15 +129,29 @@ class AssembleFormLinkParserFunction extends SMWQueryProcessor  {
                 $html .= '<span class="cfl cfl-separator">' . $separatorString . '</span>';
                 $html .= '<input class="cfl cfl-hidden" style="display: none;" value="' . $separatorValue . '"></input>';
 
-            // If its not a separator, it is a form element
 
+            // If its not a separator, it is a form element
             } else {
 
                 if (startsWith($value, 'textfield')) {
 
-                    $additionalParams = extractSubOptions($value);
+                    // Extract suboptions and add them as HTML attributes to the input element
+                    $additionalAttributes = extractSubOptions($value);
 
-                    $html .= '<input type="text" required class="cfl" name="' . $key . '"' . $additionalParams . '>';
+                    // Get the suboptions as associative array, to allow for easier handling
+                    $additionalAttributesArray = extractSubOptions($value, true);
+
+                    // If data-widget is a select box, or the select2 library is used, render a <select> element
+
+                    if (array_key_exists('data-select2', $additionalAttributesArray)) {
+                        $html .= '<select required class="cfl select2"' . $additionalAttributes . '></select>';
+                    } else if (array_key_exists('data-select', $additionalAttributesArray)) {
+                        $html .= '<select required class="cfl"' . $additionalAttributes . '></select>';
+                    } else {
+                        $additionalAttributes .= extractSubOptions($value);
+                        $html .= '<input type="text" required class="cfl' . $additionalClasses . '" name="' . $key . '"' . $additionalAttributes . '>';
+                    }
+
                 }
             }
         }
@@ -189,8 +204,17 @@ function extractOptions(array $options, $separator = '=') {
     return $results;
 }
 
-
-function extractSubOptions($optionString) {
+/**
+ * Suboptions can be attached to an option value
+ * They are provided with brackets, containing key=value
+ * Example: [placeholder=Alternative Text][size=16]
+ *
+ * @param string $optionString
+ * @param boolean $returnAsObject
+ *
+ * @return array $additionalParams
+ */
+function extractSubOptions($optionString, $returnAsObject = false) {
 
     $additionalParams = '';
 
@@ -201,12 +225,19 @@ function extractSubOptions($optionString) {
     $inputParams = extractOptions($matches[1]); // Don't include the brackets
 
     // Add additional parameters
-    $additionalParams = '';
+    $additionalParamsArray = array();
     foreach ($inputParams as $inputParamKey => $inputParamValue) {
         $additionalParams .= ' ' . htmlspecialchars($inputParamKey) . '="' . htmlspecialchars($inputParamValue) . '"';
+        $additionalParamsArray[htmlspecialchars($inputParamKey)] = htmlspecialchars($inputParamValue);
     }
 
-    return $additionalParams;
+    if ($returnAsObject === true) {
+        return $additionalParamsArray;
+    } else {
+        return $additionalParams;
+    }
+
+
 }
 
 /**

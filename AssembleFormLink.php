@@ -49,10 +49,9 @@ $wgResourceModules['ext.AssembleFormLink'] = array(
    ),
    'styles' => array(
       'lib/AssembleFormLink.css',
-   )
-   ,'messages' => array(
    ),
    'dependencies' => array(
+      'ext.semanticforms.select2'
    ),
    'localBasePath' => __DIR__,
    'remoteExtPath' => 'AssembleFormLink',
