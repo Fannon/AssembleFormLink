@@ -16,6 +16,7 @@
 
     "globals": {
         "mediaWiki": false,
-        "jQuery": false
+        "jQuery": false,
+        "console": false
     }
 }
