@@ -9,6 +9,7 @@
     "undef": true,
     "unused": true,
     "strict": false,
+    "quotmark": true,
 
     // Environment
     "browser": true,
