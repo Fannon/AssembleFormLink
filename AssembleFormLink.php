@@ -42,7 +42,7 @@ $wgExtensionCredits['other'][] = array(
    'author'         => array('Simon Heimler'),
    'version'        => '0.0.1',
    'url'            => 'https://www.mediawiki.org/wiki/Extension:AssembleFormLink',
-   'descriptionmsg' => 'AssembleFormLink-desc',
+   'descriptionmsg' => 'assembleformlink-desc',
 );
 
 
