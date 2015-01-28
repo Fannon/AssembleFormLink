@@ -1,0 +1,8 @@
+{
+	"@metadata": {
+		"authors": [
+			"Fannon"
+		]
+	},
+	"AssembleFormLink-desc": "Die AssembleFormLink extension bietet eine parser-function mit der einfache Formulare in Seitenansichten erstellt werden können. Diese generieren einen Link zu einem neuen Formular mit entsprechender Seiten-URL."
+}

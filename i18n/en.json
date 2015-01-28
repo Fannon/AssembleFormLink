@@ -1,0 +1,8 @@
+{
+	"@metadata": {
+		"authors": [
+			"Fannon"
+		]
+	},
+	"AssembleFormLink-desc": "The AssembleFormLink extension provides a parser function that allows to build simple helper forms on a page (in display mode)"
+}

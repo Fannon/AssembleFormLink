@@ -1,13 +1,20 @@
 <?php
 /**
- * plastic.js MediaWiki Wrapper
+ * The AssembleFormLink extension provides a parser function that allows to build simple helper forms on a page (in display mode).
  *
  * For more info see http://mediawiki.org/wiki/Extension:AssembleFormLink
  *
  * @file
  * @ingroup Extensions
- * @author Simon Heimler, 2014
- * @license GNU General Public Licence 2.0 or later
+ * @package MediaWiki
+ *
+ * @links https://github.com/Fannon/AssembleFormLink/blob/master/README.md Documentation
+ * @links https://www.mediawiki.org/wiki/Extension_talk:AssembleFormLink Support
+ * @links https://github.com/Fannon/AssembleFormLink/issues Bug tracker
+ * @links https://github.com/Fannon/AssembleFormLink Source code
+ *
+ * @author Simon Heimler (Fannon), 2015
+ * @license http://opensource.org/licenses/mit-license.php The MIT License (MIT)
  */
 
 //////////////////////////////////////////
