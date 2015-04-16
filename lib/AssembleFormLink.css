@@ -11,7 +11,7 @@ input.afl {
 
 .afl.select2-container {
     margin: 0px 58px 4px 0;
-    min-width: 220px;
+    /*min-width: 220px;*/
 }
 
 .afl-separator,
