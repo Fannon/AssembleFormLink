@@ -54,7 +54,14 @@ class AssembleFormLinkParserFunction extends SMWQueryProcessor  {
         // BUILD FORM (HTML)                    //
         //////////////////////////////////////////
 
-        $html = '<form class="afl-form">';
+        $formArguments = '';
+        // Get category-min-width parameter if given
+        if (array_key_exists('check-for-existence', $arguments)) {
+            $formArguments .= 'check-for-existence="true" ';
+            unset($arguments['check-for-existence']);
+        }
+
+        $html = '<form class="afl-form" ' . $formArguments . '>';
 
         // TODO: Rename category to label
         // TODO: Add option to make the label a link (to a category or general)
@@ -144,13 +151,24 @@ class AssembleFormLinkParserFunction extends SMWQueryProcessor  {
 
                     // If data-widget is a select box, or the select2 library is used, render a <select> element
 
+                    $attr = 'required';
+
+                    if (array_key_exists('optional', $additionalAttributesArray)) {
+                        $attr = '';
+                    }
+
+                    if (array_key_exists('placeholder', $additionalAttributesArray)) {
+                        $attr .= ' title="' . $additionalAttributesArray['placeholder'] . '" data-toggle="tooltip" data-placement="top"';
+                    }
+
+
                     if (array_key_exists('data-select2', $additionalAttributesArray)) {
-                        $html .= '<select required class="afl select2"' . $additionalAttributes . '></select>';
+                        $html .= '<select ' . $attr . ' class="afl select2"' . $additionalAttributes . '></select>';
                     } else if (array_key_exists('data-select', $additionalAttributesArray)) {
-                        $html .= '<select required class="afl"' . $additionalAttributes . '></select>';
+                        $html .= '<select ' . $attr . ' class="afl"' . $additionalAttributes . '></select>';
                     } else {
                         $additionalAttributes .= extractSubOptions($value);
-                        $html .= '<input type="text" required class="afl' . $additionalClasses . '"' . $additionalAttributes . '>';
+                        $html .= '<input type="text" ' . $attr . ' class="afl' . $additionalClasses . '"' . $additionalAttributes . '>';
                     }
 
                 }
