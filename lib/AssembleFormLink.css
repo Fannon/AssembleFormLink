@@ -1,8 +1,9 @@
 .afl {
     display: inline-block;
     margin-right: 8px;
-    margin-bottom: 8px;
-    min-height: 22px;
+    margin-top: 4px;
+    min-height: 24px;
+    box-shadow: none;
 }
 
 input.afl {
@@ -22,7 +23,7 @@ input.afl {
     padding: 1px 8px;
     background: #EEE;
     color: #444;
-    min-height: 22px;
+    height: 24px;
 }
 
 .afl-category {
@@ -46,9 +47,9 @@ a:hover.afl-category {
 .afl-form .afl-submit {
     border: 1px solid #81C735;
     border-radius: 3px;
-    padding: 4px 8px;
     background: #81C735;
-    min-height: 22px;
-    margin-top: 1px;
+    height: 24px;
+    margin-top: 4px;
+    color: #FFF;
 }
 
