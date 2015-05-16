@@ -131,6 +131,10 @@ class AssembleFormLinkParserFunction extends SMWQueryProcessor  {
                 } else if (startsWith($key, 'comma')) {
                     $separatorString = ',';
                     $separatorValue = ',';
+                } else {
+                    // Default to space
+                    $separatorString = '&nbsp;';
+                    $separatorValue = ' ';
                 }
 
                 $html .= '<span class="afl afl-separator">' . $separatorString . '</span>';
