@@ -55,7 +55,7 @@ class AssembleFormLinkParserFunction extends SMWQueryProcessor  {
         //////////////////////////////////////////
 
         $formArguments = '';
-        // Get category-min-width parameter if given
+
         if (array_key_exists('check-for-existence', $arguments)) {
             $formArguments .= 'check-for-existence="true" ';
             unset($arguments['check-for-existence']);
